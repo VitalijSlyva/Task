@@ -1,0 +1,109 @@
+﻿@model Rental.WEB.Models.Domain_Models.Rent.ReturnDM
+
+@{
+    ViewBag.Title = "Возврат";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.HiddenFor(x => x.Order.Id)
+    <h3>Заказ:</h3>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Номер заказа
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(x => x.Order.Id)
+            </dd>
+            <dt>
+                Автомобиль
+            </dt>
+
+            <dd>
+                @Model.Order.Car.Brand.Name @Model.Order.Car.Model
+            </dd>
+
+            <dt>
+                Номер
+            </dt>
+
+            <dd>
+                @Model.Order.Car.Number
+            </dd>
+
+            <dt>
+                Период
+            </dt>
+
+            <dd>
+                с @Model.Order.DateStart.ToShortDateString() по @Model.Order.DateEnd.ToShortDateString()
+            </dd>
+        </dl>
+    </div>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @*<div class="form-group">
+        @Html.LabelFor(model => model.IsReturned, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.IsReturned)
+                @Html.ValidationMessageFor(model => model.IsReturned, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>*@
+    <div class="form-group">
+        @Html.Label("С повреждениями", new { @for = "withCrash", @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.CheckBox("withCrash", false, new { id = "withCrash" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group " id="crash-info-1">
+        @Html.LabelFor(model => model.Crash.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Crash.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Crash.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group " id="crash-info-2">
+        @Html.LabelFor(model => model.Crash.Payment.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Crash.Payment.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Crash.Payment.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Подтвердить" class="btn btn-default btn-dark" />
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $("#crash-info-1").hide();
+        $("#crash-info-2").hide();
+        var c = document.getElementById("withCrash");
+        c.addEventListener('change', function () {
+            if (this.checked) {
+                $("#crash-info-1").show();
+                $("#crash-info-2").show();
+                } else {
+                $("#crash-info-1").hide();
+                $("#crash-info-2").hide();
+                }
+            });
+    </script>
+}
